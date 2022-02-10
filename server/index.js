@@ -28,6 +28,21 @@ app.get('/api/students', (req, res) => {
     res.status(200).send(students)
 })
 
+app.get('/api/students/:idx', (req, res) => {
+    const idx = +req.params.idx;
+
+    if (idx < 0 || idx >= students.length) {
+        if (idx < 0) {
+            rollbar.error('Someone tried to get an index less than 0')
+        } else {
+            rollbar.error('Someone tried to get an index that was out of range')
+        }
+        return res.sendStatus(400);
+    }
+
+    res.status(200).send(students[idx])
+})
+
 app.post('/api/students', (req, res) => {
     const { name } = req.body
     
